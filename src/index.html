@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcyjny Generator Palet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Funkcyjny Generator Palet</h1>
+        <p>Projekt oparty na czystych funkcjach w TypeScript.</p>
+    </header>
+
+    <main>
+        <div class="controls">
+            <label for="base-color">Wybierz kolor bazowy:</label>
+            <input type="color" id="base-color" value="#3498db">
+
+            <label for="palette-type">Wybierz typ palety:</label>
+            <select id="palette-type">
+                <option value="analogous">Analogiczna</option>
+                <option value="monochromatic">Monochromatyczna</option>
+                <option value="triadic">Triadyczna</option>
+                <option value="complementary">Komplementarna</option>
+            </select>
+        </div>
+
+        <div id="palette-container">
+        </div>
+    </main>
+
+    <div id="copy-notification">Copied!</div>
+
+    <script src="main.js" type="module"></script>
+</body>
+
+</html>
