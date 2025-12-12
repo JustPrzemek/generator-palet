@@ -1,14 +1,34 @@
 # Funkcyjny Generator Palet
 
-Projekt generatora palet kolorów napisany w **TypeScript** z naciskiem na **Programowanie Funkcyjne (Functional Programming)**.
-Aplikacja działa w trybie **Dark Mode** i jest przygotowana do łatwego uruchomienia w kontenerze **Docker**.
+Profesjonalne narzędzie do generowania harmonijnych palet kolorów, stworzone z wykorzystaniem **TypeScript** i paradygmatu **Programowania Funkcyjnego**. Projekt demonstruje czystą architekturę kodu, separację logiki biznesowej od warstwy prezentacji oraz nowoczesne podejście do wdrażania aplikacji webowych.
 
-## Funkcjonalności
+Aplikacja oferuje intuicyjny interfejs w trybie **Dark Mode**, zapewniając komfort pracy nawet w godzinach nocnych.
 
-*   **Czyste Funkcje (Pure Functions):** Logika generowania kolorów (`logic.ts`) jest w pełni odseparowana od DOM.
-*   **Dark Mode:** Ciemny motyw przyjazny dla oczu.
-*   **Kopiowanie:** Kliknięcie w kolor kopiuje go do schowka (z powiadomieniem "Copied!").
-*   **Export CSS:** Możliwość wygenerowania gotowych zmiennych CSS dla całej palety.
+## 🌟 Główne Cechy
+
+*   **Architektura Funkcyjna:** Rdzeń aplikacji oparty na czystych funkcjach (Pure Functions), co gwarantuje przewidywalność i łatwość testowania.
+*   **TypeScript:** Pełne typowanie statyczne zapewniające bezpieczeństwo kodu i lepsze Developer Experience.
+*   **Konteneryzacja:** Gotowość do wdrożenia dzięki Docker i Nginx.
+*   **Interaktywność:** Kopiowanie kolorów do schowka jednym kliknięciem.
+*   **Wiele Trybów Generowania:** Obsługa palet monochromatycznych, analogowych, triady i dopełnieniowych.
+
+## 🛠 Technologie
+
+Projekt wykorzystuje nowoczesny stack technologiczny:
+
+*   **Język:** [TypeScript](https://www.typescriptlang.org/) (ES Modules)
+*   **Stylizacja:** Native CSS (Dark Mode, Responsive Design)
+*   **Infrastruktura:** [Docker](https://www.docker.com/) + [Nginx](https://nginx.org/) (Alpine Linux)
+*   **Paradygmat:** Functional Programming (Immutability, Pure Functions)
+
+## 📚 Dokumentacja Kodu
+
+Struktura projektu została zaprojektowana z myślą o czytelności i separacji odpowiedzialności:
+
+*   **`src/logic.ts`**: Serce aplikacji. Zawiera wyłącznie **czyste funkcje** odpowiedzialne za konwersje kolorów (HEX ↔ RGB ↔ HSL) oraz algorytmy generowania palet. Nie posiada żadnych efektów ubocznych (Side Effects).
+*   **`src/main.ts`**: Warstwa interfejsu. Odpowiada za manipulację DOM, obsługę zdarzeń (Events) i komunikację z użytkownikiem.
+*   **`src/style.css`**: Arkusze stylów definiujące wygląd aplikacji, w tym natywny Dark Mode.
+
 
 ## 🚀 Jak Uruchomić (Docker) - Zalecane
 
