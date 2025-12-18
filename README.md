@@ -4,7 +4,7 @@ Profesjonalne narzędzie do generowania harmonijnych palet kolorów, stworzone z
 
 Aplikacja oferuje intuicyjny interfejs w trybie **Dark Mode**, zapewniając komfort pracy nawet w godzinach nocnych.
 
-## 🌟 Główne Cechy
+## Główne Cechy
 
 *   **Architektura Funkcyjna:** Rdzeń aplikacji oparty na czystych funkcjach (Pure Functions), co gwarantuje przewidywalność i łatwość testowania.
 *   **TypeScript:** Pełne typowanie statyczne zapewniające bezpieczeństwo kodu i lepsze Developer Experience.
@@ -12,7 +12,7 @@ Aplikacja oferuje intuicyjny interfejs w trybie **Dark Mode**, zapewniając komf
 *   **Interaktywność:** Kopiowanie kolorów do schowka jednym kliknięciem.
 *   **Wiele Trybów Generowania:** Obsługa palet monochromatycznych, analogowych, triady i dopełnieniowych.
 
-## 🛠 Technologie
+## Technologie
 
 Projekt wykorzystuje nowoczesny stack technologiczny:
 
@@ -21,7 +21,7 @@ Projekt wykorzystuje nowoczesny stack technologiczny:
 *   **Infrastruktura:** [Docker](https://www.docker.com/) + [Nginx](https://nginx.org/) (Alpine Linux)
 *   **Paradygmat:** Functional Programming (Immutability, Pure Functions)
 
-## 📚 Dokumentacja Kodu
+## Dokumentacja Kodu
 
 Struktura projektu została zaprojektowana z myślą o czytelności i separacji odpowiedzialności:
 
@@ -30,7 +30,7 @@ Struktura projektu została zaprojektowana z myślą o czytelności i separacji 
 *   **`src/style.css`**: Arkusze stylów definiujące wygląd aplikacji, w tym natywny Dark Mode.
 
 
-## 🚀 Jak Uruchomić (Docker) - Zalecane
+## Jak Uruchomić (Docker)
 
 To jest preferowany sposób uruchomienia aplikacji.
 
