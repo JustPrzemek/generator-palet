@@ -1,3 +1,5 @@
+import * as R from 'ramda';
+
 export interface RgbColor {
     r: number;
     g: number;
@@ -27,7 +29,7 @@ export const rgbToHex = (rgb: RgbColor): string => {
     return `#${toHex(rgb.r)}${toHex(rgb.g)}${toHex(rgb.b)}`;
 };
 
-export const rgbToHsl = (rgb: RgbColor): HslColor => {
+export const rgbToHsl = R.memoizeWith(JSON.stringify, (rgb: RgbColor): HslColor => {
     const r = rgb.r / 255;
     const g = rgb.g / 255;
     const b = rgb.b / 255;
@@ -47,9 +49,9 @@ export const rgbToHsl = (rgb: RgbColor): HslColor => {
         h /= 6;
     }
     return { h: h * 360, s: s * 100, l: l * 100 };
-};
+});
 
-export const hslToRgb = (hsl: HslColor): RgbColor => {
+export const hslToRgb = R.memoizeWith(JSON.stringify, (hsl: HslColor): RgbColor => {
     const h = hsl.h / 360;
     const s = hsl.s / 100;
     const l = hsl.l / 100;
@@ -74,47 +76,60 @@ export const hslToRgb = (hsl: HslColor): RgbColor => {
         b = hue2rgb(p, q, h - 1 / 3);
     }
     return { r: r * 255, g: g * 255, b: b * 255 };
+});
+
+const wrapHue = (h: number): number => (h + 360) % 360;
+const adjustLightness = (l: number, amount: number) => Math.max(0, Math.min(100, l + amount));
+
+const getMonochromaticPalette = (base: HslColor): HslColor[] => [
+    { ...base },
+    { ...base, l: adjustLightness(base.l, -20) },
+    { ...base, l: adjustLightness(base.l, -10) },
+    { ...base, l: adjustLightness(base.l, 10) },
+    { ...base, l: adjustLightness(base.l, 20) }
+];
+
+const getAnalogousPalette = (base: HslColor): HslColor[] => [
+    { ...base },
+    { ...base, h: wrapHue(base.h - 30) },
+    { ...base, h: wrapHue(base.h - 15) },
+    { ...base, h: wrapHue(base.h + 15) },
+    { ...base, h: wrapHue(base.h + 30) }
+];
+
+const getTriadicPalette = (base: HslColor): HslColor[] => [
+    { ...base },
+    { ...base, h: wrapHue(base.h + 120) },
+    { ...base, h: wrapHue(base.h + 240) },
+    { ...base, h: wrapHue(base.h + 120), l: adjustLightness(base.l, 15) },
+    { ...base, h: wrapHue(base.h + 240), l: adjustLightness(base.l, -15) }
+];
+
+const getComplementaryPalette = (base: HslColor): HslColor[] => {
+    const complementHue = wrapHue(base.h + 180);
+    return [
+        { ...base },
+        { ...base, h: complementHue },
+        { ...base, l: adjustLightness(base.l, 20) },
+        { h: complementHue, s: base.s, l: adjustLightness(base.l, 15) },
+        { h: complementHue, s: base.s, l: adjustLightness(base.l, -15) }
+    ];
+};
+
+const strategies = {
+    'monochromatic': getMonochromaticPalette,
+    'analogous': getAnalogousPalette,
+    'triadic': getTriadicPalette,
+    'complementary': getComplementaryPalette
 };
 
 export const generatePalette = (baseHex: string, type: PaletteType): string[] => {
-    const baseHsl = rgbToHsl(hexToRgb(baseHex));
-    const palette: HslColor[] = [baseHsl];
-
-    const wrapHue = (h: number): number => (h + 360) % 360;
-
-    switch (type) {
-        case 'monochromatic':
-            palette.push({ ...baseHsl, l: Math.max(0, baseHsl.l - 20) });
-            palette.push({ ...baseHsl, l: Math.max(0, baseHsl.l - 10) });
-            palette.push({ ...baseHsl, l: Math.min(100, baseHsl.l + 10) });
-            palette.push({ ...baseHsl, l: Math.min(100, baseHsl.l + 20) });
-            break;
-
-        case 'analogous':
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h - 30) });
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h - 15) });
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h + 15) });
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h + 30) });
-            break;
-
-        case 'triadic':
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h + 120) });
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h + 240) });
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h + 120), l: Math.min(100, baseHsl.l + 15) });
-            palette.push({ ...baseHsl, h: wrapHue(baseHsl.h + 240), l: Math.max(0, baseHsl.l - 15) });
-            break;
-
-        case 'complementary':
-            const complementHue = wrapHue(baseHsl.h + 180);
-            palette.push({ ...baseHsl, h: complementHue });
-            palette.push({ ...baseHsl, l: Math.min(100, baseHsl.l + 20) });
-            palette.push({ h: complementHue, s: baseHsl.s, l: Math.min(100, baseHsl.l + 15) });
-            palette.push({ h: complementHue, s: baseHsl.s, l: Math.max(0, baseHsl.l - 15) });
-            break;
-    }
-
-    return palette
-        .sort((a, b) => a.h - b.h)
-        .map(hslToRgb)
-        .map(rgbToHex);
+    return R.pipe(
+        hexToRgb,
+        rgbToHsl,
+        strategies[type] || strategies['monochromatic'],
+        R.sort((a: HslColor, b: HslColor) => a.h - b.h),
+        R.map(hslToRgb),
+        R.map(rgbToHex)
+    )(baseHex);
 };

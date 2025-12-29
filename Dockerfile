@@ -5,18 +5,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN npm install --only=development
-
-COPY tsconfig.json ./
-COPY src ./src
-
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-
-RUN npm install --only=development
+RUN npm install
 
 COPY tsconfig.json ./
 COPY src ./src
